@@ -1,5 +1,4 @@
 <?php
-    namespace MicrosoftAzure\Storage\Samples;
     require_once "./vendor/autoload.php";
 
     use MicrosoftAzure\Storage\Blob\BlobRestProxy;
@@ -105,14 +104,26 @@
                                             try {
                                                 $blobClient = BlobRestProxy::createBlobService($connectionString);
                                                 $blobs = $blobClient->listBlobs($containerName);
+                                                $index=0;
                                                 foreach ($blobs->getBlobs() as $blob) {
+                                                    $array[$index] = array( "name" => $blob->getName(),"Size" => $blob->getProperties()->getContentLength(),"Date" =>$blob->getProperties()->getCreationTime()->getTimestamp());
+                                                $index++;
+                                                }
+
+                                                function compareDates($a, $b) {
+                                                    return $b['Date'] - $a['Date'];
+                                                }
+
+                                                usort($array, 'compareDates');
+
+                                                foreach($array as $key => $value){
                                         ?>
                                         
                                     <tbody>
                                         <tr>
-                                            <td><?php echo $blob->getName(); ?> 
+                                            <td><?php echo $value['name']; ?> 
                                                 <?php
-                                                    $sub = substr($blob->getName(),-4);
+                                                    $sub = substr($value['name'],-4);
                                                     if($sub == '.png' || $sub == '.gif' || $sub == '.jpg' || $sub == 'jpeg'){
                                                         ?>
                                                             <div class="float-end">
@@ -123,12 +134,12 @@
                                                     }
                                                 ?>
                                             </td>
-                                            <td><?php echo $blob->getProperties()->getContentLength() ." Bytes"; ?></td>
-                                            <td><?php echo date('H:i:s d-m-Y', $blob->getProperties()->getCreationTime()->getTimestamp());?></td>
+                                            <td><?php echo $value['Size']." Bytes"; ?></td>
+                                            <td><?php echo date('H:i:s d-m-Y', strval($value['Date']));?></td>
                                             <td>
                                                 <div class="btn-group ">
-                                                    <button type="submit" class="btn btn-info" formaction="./download.php?name=<?php echo $blob->getName(); ?>"><i class="bi bi-cloud-download"></i> Download</button>
-                                                    <button class="btn btn-danger" onclick="myFunction('<?php echo $blob->getName();?>')"><i class="bi bi-trash3"></i> Delete</button>
+                                                    <button type="submit" class="btn btn-info" formaction="./download.php?name=<?php echo $value['name']; ?>"><i class="bi bi-cloud-download"></i> Download</button>
+                                                    <button class="btn btn-danger" onclick="myFunction('<?php echo $value['name'];?>')"><i class="bi bi-trash3"></i> Delete</button>
                                                 </div>
                                             </td>
                                         <?php
