@@ -116,7 +116,6 @@
 
                                                 usort($array, 'compareDates');
 
-                                                print_r($array);
                                                 foreach($array as $key => $value){
                                         ?>
                                         
