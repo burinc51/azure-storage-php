@@ -116,6 +116,7 @@
 
                                                 usort($array, 'compareDates');
 
+                                                print_r($array);
                                                 foreach($array as $key => $value){
                                         ?>
                                         
@@ -127,7 +128,7 @@
                                                     if($sub == '.png' || $sub == '.gif' || $sub == '.jpg' || $sub == 'jpeg'){
                                                         ?>
                                                             <div class="float-end">
-                                                                <button class="btn btn-primary text-right image-link" data-mfp-src="https://burinstorage.blob.core.windows.net/mybob/<?php echo $blob->getName();?>">Show</button>
+                                                                <button class="btn btn-primary text-right image-link" data-mfp-src="https://burinstorage.blob.core.windows.net/mybob/<?php echo $value['name'];?>">Show</button>
                                                             </div>
                                                         </div>
                                                         <?php
