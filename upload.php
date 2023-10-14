@@ -12,35 +12,22 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["fileToUpload"])) {
     $fileName = $_FILES["fileToUpload"]["name"];
     $filePath = $_FILES["fileToUpload"]["tmp_name"];
-    if (preg_match('/[ก-๙]/u', substr($fileName,0,-4)) || preg_match('/[0-9]/',substr($fileName,0,-4))) {
+    try {
+        $blobClient->createBlockBlob(
+            $containerName,
+            $fileName,
+            fopen($filePath, "r")
+        );
         echo "
-        <script> alert ('Please upload the file in English.');
-            window.location.href  = 'index.php';
-        </script>";
-    }else{
-        if ($fileName == ""){
-            echo "
-            <script> alert ('Error uploaded successfully.');
+            <script> alert ('File uploaded successfully.');
                 window.location.href  = 'index.php';
             </script>";
-        }
-        try {
-            $blobClient->createBlockBlob(
-                $containerName,
-                $fileName,
-                fopen($filePath, "r")
-            );
-            echo "
-                <script> alert ('File uploaded successfully.');
-                    window.location.href  = 'index.php';
-                </script>";
-        } catch (ServiceException $e) {
-            $code = $e->getCode();
-            $error_message = $e->getMessage();
-            echo "HTTP status code: $code\n";
-            echo "Error message: $error_message\n";
-        } 
-    }
+    } catch (ServiceException $e) {
+        $code = $e->getCode();
+        $error_message = $e->getMessage();
+        echo "HTTP status code: $code\n";
+        echo "Error message: $error_message\n";
+    } 
 }else{
     echo "
         <script> alert ('Error uploaded.');
