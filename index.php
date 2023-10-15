@@ -7,7 +7,8 @@
 
     $connectionString = 'DefaultEndpointsProtocol=https;AccountName=burinstorage;AccountKey=6YeWBTRUXt17J4E2MKwJ/adg9Wj1Bd9jJiXWwuAbYMC51NnoMQC/DPZcyREYx53ZeA4qUgFzlfJl+AStIyuR8Q==';
     $containerName = "mybob";
-    
+    $timezone = new DateTimeZone('Asia/Bangkok');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,12 +107,12 @@
                                                 $blobs = $blobClient->listBlobs($containerName);
                                                 $index=0;
                                                 foreach ($blobs->getBlobs() as $blob) {
-                                                    $array[$index] = array( "name" => $blob->getName(),"Size" => $blob->getProperties()->getContentLength(),"Date" =>$blob->getProperties()->getCreationTime()->getTimestamp());
+                                                    $array[$index] = array( "name" => $blob->getName(),"Size" => $blob->getProperties()->getContentLength(),"Date" =>$blob->getProperties()->getLastModified()->setTimezone($timezone)->format('H:i:s d-m-Y'));
                                                 $index++;
                                                 }
 
                                                 function compareDates($a, $b) {
-                                                    return $b['Date'] - $a['Date'];
+                                                    return strtotime($b['Date']) - strtotime($a['Date']);
                                                 }
 
                                                 usort($array, 'compareDates');
@@ -135,10 +136,10 @@
                                                 ?>
                                             </td>
                                             <td><?php echo $value['Size']." Bytes"; ?></td>
-                                            <td><?php echo date('H:i:s d-m-Y', strval($value['Date']));?></td>
+                                            <td><?php echo $value['Date'];?></td>
                                             <td>
                                                 <div class="btn-group ">
-                                                    <button type="submit" class="btn btn-info" formaction="./download.php?name=<?php echo $value['name']; ?>"><i class="bi bi-cloud-download"></i> Download</button>
+                                                    <a href="https://burinstorage.blob.core.windows.net/mybob/<?php echo $value['name']; ?>" class="btn btn-info" > <i class="bi bi-cloud-download"></i> Download</a>
                                                     <button class="btn btn-danger" onclick="myFunction('<?php echo $value['name'];?>')"><i class="bi bi-trash3"></i> Delete</button>
                                                 </div>
                                             </td>
