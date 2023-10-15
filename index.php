@@ -82,7 +82,7 @@
                         <div class="col-md-12">
                             <div class="mx-auto p-2">
                                     <label for="formFileLg" class="form-label">File Upload</label>
-                                    <input class="form-control form-control-lg" id="formFileLg" type="file" name="fileToUpload">
+                                    <input class="form-control form-control-lg" id="formFileLg" type="file" name="fileToUpload" required>
                             </div>
                             <div class="ms-auto p-2" style="width: 120px;">
                                 <button type="submit" class="btn btn-success" formaction="./upload.php"><i class="bi bi-cloud-arrow-up"></i> Upload</button>
