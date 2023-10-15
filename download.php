@@ -10,13 +10,13 @@
     $blobClient = BlobRestProxy::createBlobService($connectionString);
 
     $blobName = urldecode($_GET["name"]);
-    echo $blobName;
-    // try {
-    //     $url = "https://burinstorage.blob.core.windows.net/mybob/".$blobName;
-    //     header("Location: $url");
-    // } catch (ServiceException $e) {
-    //     echo '<script>alert("'.$e->getMessage().'");</script>';
-    // }
+    // echo $blobName;
+    try {
+        $url = "https://burinstorage.blob.core.windows.net/mybob/".$blobName;
+        header("Location: $url");
+    } catch (ServiceException $e) {
+        echo '<script>alert("'.$e->getMessage().'");</script>';
+    }
 ?>
 
 
