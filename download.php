@@ -10,13 +10,36 @@
     $blobClient = BlobRestProxy::createBlobService($connectionString);
 
     $blobName = urldecode($_GET["name"]);
-    // echo $blobName;
     try {
-        $url = "https://burinstorage.blob.core.windows.net/mybob/".$blobName;
-        header("Location: $url");
+        $blob = $blobClient->getBlob($containerName, $blobName);
+
+        $fileext = pathinfo($blobName, PATHINFO_EXTENSION);
+        if ($fileext === "pdf") {
+            header('Content-type: application/pdf');
+        } else if ($fileext === "doc") {
+            header('Content-type: application/msword');
+        } else if ($fileext === "docx") {
+            header('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        } else if ($fileext === "txt") {
+            header('Content-type: text/plain');
+        } else if ($fileext === "jpg" || $fileext === "jpeg") {
+            header('Content-type: image/jpeg');
+        } else if ($fileext === "png") {
+            header('Content-type: image/png');
+        } else if ($fileext === "gif") {
+            header('Content-type: image/gif');
+        }
+        header("Content-Disposition: attachment; filename=\"" . $blobName . "\"");
+        fpassthru($blob->getContentStream());
     } catch (ServiceException $e) {
         echo '<script>alert("'.$e->getMessage().'");</script>';
     }
+    // try {
+    //     $url = "https://burinstorage.blob.core.windows.net/mybob/".$blobName;
+    //     header("Location: $url");
+    // } catch (ServiceException $e) {
+    //     echo '<script>alert("'.$e->getMessage().'");</script>';
+    // }
 ?>
 
 
