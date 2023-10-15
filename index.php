@@ -138,7 +138,7 @@
                                             <td><?php echo date('H:i:s d-m-Y', strval($value['Date']));?></td>
                                             <td>
                                                 <div class="btn-group ">
-                                                    <button type="submit" class="btn btn-info" formaction="./download.php?name=<?php echo $value['name']; ?>"><i class="bi bi-cloud-download"></i> Download</button>
+                                                    <a href="https://burinstorage.blob.core.windows.net/mybob/<?php echo $value['name']; ?>" class="btn btn-info" > <i class="bi bi-cloud-download"></i> Download</a>
                                                     <button class="btn btn-danger" onclick="myFunction('<?php echo $value['name'];?>')"><i class="bi bi-trash3"></i> Delete</button>
                                                 </div>
                                             </td>
