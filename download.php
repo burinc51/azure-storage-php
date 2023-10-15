@@ -9,7 +9,7 @@
     $containerName = "mybob";
     $blobClient = BlobRestProxy::createBlobService($connectionString);
 
-    $blobName = $_GET["name"];
+    $blobName = urldecode($_GET["name"]);
     try {
         $url = "https://burinstorage.blob.core.windows.net/mybob/".$blobName;
         header("Location: $url");
